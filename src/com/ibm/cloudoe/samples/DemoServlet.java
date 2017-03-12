@@ -162,7 +162,6 @@ public class DemoServlet extends HttpServlet {
 
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Service error: " + e.getMessage(), e);
-			resp.setStatus(HttpStatus.SC_BAD_GATEWAY);
 		}
 	}
 
