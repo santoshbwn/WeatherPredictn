@@ -110,9 +110,9 @@ public class DemoServlet extends HttpServlet {
 			//httpResponse.getEntity().writeTo(servletOutputStream);
 			InputStream stream=httpResponse.getEntity().getContent();
 			logger.info("RESULT=="+convertStreamToString(stream));
+			req.getRequestDispatcher("/weather_result.jsp").forward(req, resp);
 			servletOutputStream.flush();
 			servletOutputStream.close();
-			req.getRequestDispatcher("/weather_result.jsp").forward(req, resp);
 
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Service error: " + e.getMessage(), e);
