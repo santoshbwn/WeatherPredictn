@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,14 +78,15 @@ public class DemoServlet extends HttpServlet {
 	@Override
 	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
+		processResponse(req, resp);
+	}
+
+	private void processResponse(final HttpServletRequest req,
+			final HttpServletResponse resp) throws UnsupportedEncodingException {
 		logger.info("doPost");
 
 		req.setCharacterEncoding("UTF-8");
 		
-		// create the request
-		String text = req.getParameter("text");
-		String language = req.getParameter("language");
-		String locale = req.getLocale().toString().replace("_", "-");
 		
 		try {
 			//URI profileURI = new URI(baseURL + "/v2/profile").normalize();
@@ -141,6 +143,27 @@ public class DemoServlet extends HttpServlet {
 	public void init() throws ServletException {
 		super.init();
 		processVCAPServices();
+		try {
+			//URI profileURI = new URI(baseURL + "/v2/profile").normalize();
+			URI weatherURI = new URI("https://twcservice.mybluemix.net/api/weather/v1/geocode/51.78526110000001/-0.19615780000003724/forecast/intraday/10day.json").normalize();
+			
+			/*Request profileRequest = Request.Post(profileURI)
+					.addHeader("Accept", "application/json")
+					.addHeader("Content-Language", language)
+					.addHeader("Accept-Language", locale)
+					.bodyString(text, ContentType.TEXT_PLAIN);*/
+			Request profileRequest = Request.Get(weatherURI);
+
+			Executor executor = Executor.newInstance().auth(username, password);
+			Response response = executor.execute(profileRequest);
+			HttpResponse httpResponse = response.returnResponse();
+			InputStream stream=httpResponse.getEntity().getContent();
+			logger.info("RESULT=="+convertStreamToString(stream));
+
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Service error: " + e.getMessage(), e);
+			resp.setStatus(HttpStatus.SC_BAD_GATEWAY);
+		}
 	}
 
 	/**
