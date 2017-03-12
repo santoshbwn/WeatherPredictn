@@ -83,11 +83,13 @@ public class DemoServlet extends HttpServlet {
 
 	private void processResponse(final HttpServletRequest req,
 			final HttpServletResponse resp) throws UnsupportedEncodingException {
-		logger.info("doPost");
+		logger.info("*******************doPost********************");
 
 		req.setCharacterEncoding("UTF-8");
-		
-		
+		String lattitude = req.getParameter("latttitude");
+        String longitude = req.getParameter("longitude");
+        logger.info("lattitude:"+lattitude);
+        logger.info("longitude:"+longitude);
 		try {
 			//URI profileURI = new URI(baseURL + "/v2/profile").normalize();
 			URI weatherURI = new URI("https://twcservice.mybluemix.net/api/weather/v1/geocode/51.78526110000001/-0.19615780000003724/forecast/intraday/10day.json").normalize();
@@ -110,6 +112,7 @@ public class DemoServlet extends HttpServlet {
 			logger.info("RESULT=="+convertStreamToString(stream));
 			servletOutputStream.flush();
 			servletOutputStream.close();
+			req.getRequestDispatcher("/weather_result.jsp").forward(req, resp);
 
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Service error: " + e.getMessage(), e);

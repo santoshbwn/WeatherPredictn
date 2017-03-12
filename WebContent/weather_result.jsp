@@ -9,13 +9,8 @@
 <html lang="${language}">
 <head>
 <title><fmt:message key="application.title" /></title>
-<h1>Hello</h1>
+<h1>Hello Weather Result</h1>
 <body>
-<form action="demo" method="post">
-<input type="text" name="latttitude">
-    <input type="text" name="longitude">
-    <input type="submit" value="GetWeather">
-    <span class="error">${error}</span>
-</form>
+
 </body>
 </html>
