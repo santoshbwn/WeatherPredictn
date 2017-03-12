@@ -146,14 +146,14 @@ public class DemoServlet extends HttpServlet {
 		try {
 			//URI profileURI = new URI(baseURL + "/v2/profile").normalize();
 			URI weatherURI = new URI("https://twcservice.mybluemix.net/api/weather/v1/geocode/51.78526110000001/-0.19615780000003724/forecast/intraday/10day.json").normalize();
-			
+			logger.info("Weather path:"+weatherURI.getPath());
 			/*Request profileRequest = Request.Post(profileURI)
 					.addHeader("Accept", "application/json")
 					.addHeader("Content-Language", language)
 					.addHeader("Accept-Language", locale)
 					.bodyString(text, ContentType.TEXT_PLAIN);*/
 			Request profileRequest = Request.Get(weatherURI);
-
+			logger.info("username:"+username+" and password:"+password);
 			Executor executor = Executor.newInstance().auth(username, password);
 			Response response = executor.execute(profileRequest);
 			HttpResponse httpResponse = response.returnResponse();
