@@ -7,4 +7,4 @@ applications:
   host: WeatherPredictn
   disk_quota: 1024M
   services:
-  - WeatherPredictn-personality_insights
+  - Weather Company Data-2s

@@ -15,7 +15,10 @@
 
 package com.ibm.cloudoe.samples;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,11 +42,13 @@ import com.ibm.json.java.JSONObject;
 
 @MultipartConfig
 public class DemoServlet extends HttpServlet {
-
+// manifest.yml
+	//  - WeatherPredictn-personality_insights
 	private static Logger logger = Logger.getLogger(DemoServlet.class.getName());
 	private static final long serialVersionUID = 1L;
 
-	private String serviceName = "personality_insights";
+	//private String serviceName = "personality_insights";
+	private String serviceName = "weatherinsights";
 
 	// If running locally complete the variables below
 	// with the information in VCAP_SERVICES
@@ -82,13 +87,15 @@ public class DemoServlet extends HttpServlet {
 		String locale = req.getLocale().toString().replace("_", "-");
 		
 		try {
-			URI profileURI = new URI(baseURL + "/v2/profile").normalize();
+			//URI profileURI = new URI(baseURL + "/v2/profile").normalize();
+			URI weatherURI = new URI("https://twcservice.mybluemix.net/api/weather/v1/geocode/51.78526110000001/-0.19615780000003724/forecast/intraday/10day.json").normalize();
 			
-			Request profileRequest = Request.Post(profileURI)
+			/*Request profileRequest = Request.Post(profileURI)
 					.addHeader("Accept", "application/json")
 					.addHeader("Content-Language", language)
 					.addHeader("Accept-Language", locale)
-					.bodyString(text, ContentType.TEXT_PLAIN);
+					.bodyString(text, ContentType.TEXT_PLAIN);*/
+			Request profileRequest = Request.Get(weatherURI);
 
 			Executor executor = Executor.newInstance().auth(username, password);
 			Response response = executor.execute(profileRequest);
@@ -97,6 +104,8 @@ public class DemoServlet extends HttpServlet {
 
 			ServletOutputStream servletOutputStream = resp.getOutputStream();
 			httpResponse.getEntity().writeTo(servletOutputStream);
+			InputStream stream=httpResponse.getEntity().getContent();
+			System.out.println(convertStreamToString(stream));
 			servletOutputStream.flush();
 			servletOutputStream.close();
 
@@ -106,6 +115,28 @@ public class DemoServlet extends HttpServlet {
 		}
 	}
 
+	private static String convertStreamToString(InputStream is) {
+
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+	    StringBuilder sb = new StringBuilder();
+
+	    String line = null;
+	    try {
+	        while ((line = reader.readLine()) != null) {
+	            sb.append(line + "\n");
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            is.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return sb.toString();
+	}
+	
 	@Override
 	public void init() throws ServletException {
 		super.init();
