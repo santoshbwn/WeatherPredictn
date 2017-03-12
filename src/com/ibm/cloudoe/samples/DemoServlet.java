@@ -107,7 +107,7 @@ public class DemoServlet extends HttpServlet {
 			resp.setStatus(httpResponse.getStatusLine().getStatusCode());
 
 			ServletOutputStream servletOutputStream = resp.getOutputStream();
-			httpResponse.getEntity().writeTo(servletOutputStream);
+			//httpResponse.getEntity().writeTo(servletOutputStream);
 			InputStream stream=httpResponse.getEntity().getContent();
 			logger.info("RESULT=="+convertStreamToString(stream));
 			servletOutputStream.flush();
