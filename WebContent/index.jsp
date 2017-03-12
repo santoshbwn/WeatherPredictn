@@ -14,8 +14,9 @@
 <form action="demo" method="post">
 <input type="text" name="latttitude">
     <input type="text" name="longitude">
+    <input type="date" name="date">
     <input type="submit" value="GetWeather">
-    <span class="error">${error}</span>
+    <span class="error"e>${error}</span>
 </form>
 </body>
 </html>
