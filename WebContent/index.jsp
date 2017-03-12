@@ -9,5 +9,6 @@
 <html lang="${language}">
 <head>
 <title><fmt:message key="application.title" /></title>
+<h1>Hello</h1>
 
 </html>
