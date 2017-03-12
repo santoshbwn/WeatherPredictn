@@ -105,7 +105,7 @@ public class DemoServlet extends HttpServlet {
 			ServletOutputStream servletOutputStream = resp.getOutputStream();
 			httpResponse.getEntity().writeTo(servletOutputStream);
 			InputStream stream=httpResponse.getEntity().getContent();
-			System.out.println(convertStreamToString(stream));
+			logger.info("RESULT=="+convertStreamToString(stream));
 			servletOutputStream.flush();
 			servletOutputStream.close();
 
@@ -182,6 +182,7 @@ public class DemoServlet extends HttpServlet {
 	 */
 	private JSONObject getVCAPServices() {
 		String envServices = System.getenv("VCAP_SERVICES");
+		logger.info("envService==="+envServices);
 		if (envServices == null)
 			return null;
 		JSONObject sysEnv = null;
